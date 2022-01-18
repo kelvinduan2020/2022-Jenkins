@@ -1,0 +1,36 @@
+Step 1: Update your CentOS 7 system
+sudo yum install epel-release
+sudo yum update
+
+Step 2: Install Java
+sudo yum install java-1.8.0-openjdk.x86_64 -y
+sudo cp /etc/profile /etc/profile_backup
+echo 'export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk' | sudo tee -a /etc/profile
+echo 'export JRE_HOME=/usr/lib/jvm/jre' | sudo tee -a /etc/profile
+source /etc/profile
+echo $JAVA_HOME
+echo $JRE_HOME
+  
+Step 3: Install Jenkins
+cd ~ 
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+yum install jenkins -y
+
+Step 4: Start the Jenkins service and auto start on boot
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+sudo systemctl status jenkins
+
+Step 5: Configure the firewall and allow 8080 port
+sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
+sudo firewall-cmd --reload
+
+Step 6: Configure Jenkins on CentOS
+http://your_ip_or_domain:8080
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+Install Nginx (optional)
+
+References:
+1. https://www.vultr.com/docs/how-to-install-jenkins-on-centos-7
